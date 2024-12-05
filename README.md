@@ -1,66 +1,33 @@
-## Foundry
+# FundMe Smart Contract
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Overview
+The `FundMe` contract is a decentralized crowdfunding platform that allows users to contribute funds and enables the contract owner to withdraw the collected balance. It uses Chainlink's price feeds to ensure the contributed amount meets a minimum USD threshold.
 
-Foundry consists of:
+---
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Features
+- **Decentralized Funding:** Users can send Ether to the contract to participate in funding.
+- **Price Conversion:** Ensures the minimum contribution meets a specified USD value using Chainlink price feeds.
+- **Owner-only Withdrawal:** Only the contract owner can withdraw the funds.
+- **Gas Optimization:** Includes efficient storage practices like immutable and constant variables.
+- **Custom Errors:** Uses custom errors for gas-efficient error handling.
+- **Fallback Functions:** Handles Ether sent directly to the contract.
 
-## Documentation
+---
 
-https://book.getfoundry.sh/
+## Prerequisites
+1. **Solidity Version:** ^0.8.18
+2. **Dependencies:**
+   - `chainlink-brownie-contracts` for price feed integration.
+   - A deployed Chainlink Price Feed contract for ETH/USD conversion.
 
-## Usage
+---
 
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+## Deployment
+### Constructor
+The contract constructor requires the address of a Chainlink price feed for deployment.
+```solidity
+constructor(address priceFeed) {
+    i_owner = msg.sender;
+    s_priceFeed = AggregatorV3Interface(priceFeed);
+}
